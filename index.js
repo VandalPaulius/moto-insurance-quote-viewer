@@ -24,23 +24,31 @@ const initHttpListener = (database) => {
     const express = require('express');
     const app = express();
     const apiRouter = express.Router();
-    const pageRouter = express.Router();
     const bodyParser = require('body-parser');
     const router = require('./router');
+    const path = require('path');
 
     if (!database) {
         console.log('Cannot run without database');
         return;
     }
+
+    app.use((req, res, next) => {
+        res.header('Access-Control-Allow-Origin', "*");
+        res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE');
+        res.header('Access-Control-Allow-Headers', 'Content-Type');
+        next();
+    })
+
     app.use(bodyParser.urlencoded({
         extended: false
     }));
     app.use(bodyParser.json());
 
-    router.configurePages({ router: pageRouter });
     router.configureApi({ router: apiRouter, database });
 
-    app.use('/', pageRouter);
+    app.use('/', express.static(path.join(__dirname, 'client', 'build')))
+
     app.use('/api', apiRouter);
 
     const server = app.listen(parseInt(process.env.PORT), 'localhost', () =>
