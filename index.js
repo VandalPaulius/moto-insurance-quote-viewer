@@ -24,7 +24,6 @@ const initHttpListener = (database) => {
     const express = require('express');
     const app = express();
     const apiRouter = express.Router();
-    const pageRouter = express.Router();
     const bodyParser = require('body-parser');
     const router = require('./router');
     const path = require('path');
@@ -38,11 +37,9 @@ const initHttpListener = (database) => {
     }));
     app.use(bodyParser.json());
 
-    router.configurePages({ router: pageRouter });
     router.configureApi({ router: apiRouter, database });
 
-    app.use(express.static(path.join(__dirname, 'client', 'build')))
-    app.use('/', pageRouter);
+    app.use('/', express.static(path.join(__dirname, 'client', 'build')))
 
     app.use('/api', apiRouter);
 
