@@ -1,0 +1,21 @@
+{
+  "name": "gps-backend",
+  "version": "0.0.0",
+  "description": "gocompare scraper quote viewer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Vandal Paulius Juska",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cwd": "^0.10.0",
+    "dotenv": "^4.0.0",
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "mongodb": "^2.2.33"
+  }
+}
