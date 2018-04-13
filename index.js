@@ -27,6 +27,7 @@ const initHttpListener = (database) => {
     const pageRouter = express.Router();
     const bodyParser = require('body-parser');
     const router = require('./router');
+    const path = require('path');
 
     if (!database) {
         console.log('Cannot run without database');
@@ -40,7 +41,9 @@ const initHttpListener = (database) => {
     router.configurePages({ router: pageRouter });
     router.configureApi({ router: apiRouter, database });
 
+    app.use(express.static(path.join(__dirname, 'client', 'build')))
     app.use('/', pageRouter);
+
     app.use('/api', apiRouter);
 
     const server = app.listen(parseInt(process.env.PORT), 'localhost', () =>
