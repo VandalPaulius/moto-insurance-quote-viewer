@@ -6,7 +6,8 @@ class App extends React.Component {
 
         this.state = {
             batches: [],
-            scrapes: {}
+            scrapes: {},
+            activeBatchId: ''
         }
     }
 
@@ -37,8 +38,30 @@ class App extends React.Component {
             }).catch(err => this.actions.coreMessageEmit('error', `Error: ${err}`));
         },
         loadScrapes: (batchId) => {
-            console.log('fetch batches');
-        }
+            fetch(`${process.env.REACT_APP_QUOTES_API_URL}/scrapes/${batchId}/quotes`, {
+                method: 'GET',
+                mode: 'cors'
+            }).then((res) => {
+                if (res.ok) {
+                    res
+                        .json()
+                        .then((body) => {
+                            this.setState((prevState) => ({
+                                ...prevState,
+                                scrapes: {
+                                    ...prevState.scrapes,
+                                    [batchId]: body
+                                }
+                            }));
+                        });
+                } else {
+                    res
+                        .text()
+                        .then(text => this.actions.coreMessageEmit('error', `Error: ${text}`));
+                }
+            }).catch(err => this.actions.coreMessageEmit('error', `Error: ${err}`));
+        },
+        setActiveBatch: (batchId) => this.setState({ activeBatchId: batchId })
     }
 
     componentWillMount() {
@@ -52,8 +75,11 @@ class App extends React.Component {
             <div>
                 {this.state.batches.map((batch) => (
                     <div
-                        id={batch._id}
-                        onClick={() => this.actions.loadScrapes(batch._id)}
+                        key={batch._id}
+                        onClick={() => {
+                            this.actions.setActiveBatch(batch._id);
+                            this.actions.loadScrapes(batch._id);
+                        }}
                     >
                         <div>
                             <span>
@@ -77,12 +103,58 @@ class App extends React.Component {
         );
     }
 
-    render() {
-        console.log('this.state', this.state);
+    renderActiveScrapes() {
+        const activeScrapes = this.state.scrapes[this.state.activeBatchId];
 
         return (
             <div>
+                {activeScrapes
+                    ? activeScrapes.map((scrape) => {
+                        if (scrape.startedAt) {
+                            const leastExpensive = scrape.quotes.filter((quote, index) => {
+                                if (index < 3) {
+                                    return quote;
+                                }
+                            });
+
+                            return (
+                                <div key={scrape._id}>
+                                    <div>
+                                        <span>
+                                            PostCode: {scrape.inputRange.quoteDetails.addressDetails.postCode.value}
+                                        </span>
+                                        <span>
+                                            Address: {scrape.inputRange.quoteDetails.addressDetails.address.value}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        {leastExpensive.map((quote, index) => (
+                                            <div key={`${index}-${quote.price.full}`}>
+                                                {quote.price.full}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        } else {
+                            return (
+                                <div key={scrape._id}>
+                                    No quotes
+                                </div>
+                            );
+                        }
+                    })
+                    : null
+                }
+            </div>
+        );
+    }
+
+    render() {
+        return (
+            <div>
                 {this.renderBatchContainer()}
+                {this.renderActiveScrapes()}
             </div>
         );
     }
