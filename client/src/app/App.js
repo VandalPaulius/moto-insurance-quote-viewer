@@ -1,4 +1,6 @@
 import React from 'react';
+import 'normalize.css';
+import './styles.css'
 
 class App extends React.Component {
     constructor(props) {
@@ -72,33 +74,45 @@ class App extends React.Component {
 
     renderBatchContainer() {
         return (
-            <div>
-                {this.state.batches.map((batch) => (
-                    <div
-                        key={batch._id}
-                        onClick={() => {
-                            this.actions.setActiveBatch(batch._id);
-                            this.actions.loadScrapes(batch._id);
-                        }}
-                    >
-                        <div>
-                            <span>
-                                Id: {batch._id}
-                            </span>
-                            <span>
-                                Size: {batch.batchSize}
-                            </span>
+            <div className="container">
+                <div className="header">
+                    Batches
+                </div>
+                <div>
+                    {this.state.batches.map((batch) => (
+                        <div
+                            className="list-item activated"
+                            key={batch._id}
+                            onClick={() => {
+                                this.actions.setActiveBatch(batch._id);
+                                this.actions.loadScrapes(batch._id);
+                            }}
+                        >
+                            <div className="text-container">
+                                <div>
+                                    <span className="type">Id: </span>
+                                    <span>{batch._id}</span>
+                                </div>
+                                <div className="break" />
+                                <div>
+                                    <span className="type">Size: </span>
+                                    <span>{batch.batchSize}</span>
+                                </div>
+                            </div>
+                            <div className="text-container">
+                                <div>
+                                    <span className="type">Started: </span>
+                                    <span>{batch.startedAt}</span>
+                                </div>
+                                <div className="break" />
+                                <div>
+                                    <span className="type">Finished: </span>
+                                    <span>{batch.finishedAt}</span>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <span>
-                                Started: {batch.startedAt}
-                            </span>
-                            <span>
-                                Finished: {batch.finishedAt}
-                            </span>
-                        </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
         );
     }
@@ -107,54 +121,71 @@ class App extends React.Component {
         const activeScrapes = this.state.scrapes[this.state.activeBatchId];
 
         return (
-            <div>
-                {activeScrapes
-                    ? activeScrapes.map((scrape) => {
-                        if (scrape.startedAt) {
-                            const leastExpensive = scrape.quotes.filter((quote, index) => {
-                                if (index < 3) {
-                                    return quote;
-                                }
-                            });
+            <div className="container">
+                <div className="header">
+                    Batches
+                </div>
+                <div className="content">
+                    {activeScrapes
+                        ? activeScrapes.map((scrape) => {
+                            if (scrape.startedAt) {
+                                const leastExpensive = scrape.quotes.filter((quote, index) => {
+                                    if (index < 3) {
+                                        return quote;
+                                    }
+                                });
 
-                            return (
-                                <div key={scrape._id}>
-                                    <div>
-                                        <span>
-                                            PostCode: {scrape.inputRange.quoteDetails.addressDetails.postCode.value}
-                                        </span>
-                                        <span>
-                                            Address: {scrape.inputRange.quoteDetails.addressDetails.address.value}
-                                        </span>
+                                return (
+                                    <div
+                                        className="list-item"
+                                        key={scrape._id}
+                                    >
+                                        <div>
+                                            <span>
+                                                PostCode: {scrape.inputRange.quoteDetails.addressDetails.postCode.value}
+                                            </span>
+                                            <span>
+                                                Address: {scrape.inputRange.quoteDetails.addressDetails.address.value}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            {leastExpensive.map((quote, index) => (
+                                                <div key={`${index}-${quote.price.full}`}>
+                                                    {quote.price.full}
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
-                                    <div>
-                                        {leastExpensive.map((quote, index) => (
-                                            <div key={`${index}-${quote.price.full}`}>
-                                                {quote.price.full}
-                                            </div>
-                                        ))}
+                                );
+                            } else {
+                                return (
+                                    <div key={scrape._id}>
+                                        No quotes
                                     </div>
-                                </div>
-                            );
-                        } else {
-                            return (
-                                <div key={scrape._id}>
-                                    No quotes
-                                </div>
-                            );
-                        }
-                    })
-                    : null
-                }
+                                );
+                            }
+                        })
+                        : (
+                            <div className="list-item">
+                                No quotes
+                            </div>
+                        )
+                    }
+                </div>
             </div>
         );
     }
 
     render() {
         return (
-            <div>
-                {this.renderBatchContainer()}
-                {this.renderActiveScrapes()}
+            <div className="app">
+                <div className="content">
+                    <div>
+                        {this.renderBatchContainer()}
+                        <div className="break" />
+                        {this.renderActiveScrapes()}
+                    </div>
+                </div>
             </div>
         );
     }
