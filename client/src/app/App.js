@@ -135,8 +135,6 @@ class App extends React.Component {
                                     }
                                 });
 
-                                console.log('scrape: ', scrape)
-
                                 return (
                                     <div
                                         className="list-item hoverable"
