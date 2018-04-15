@@ -135,6 +135,8 @@ class App extends React.Component {
                                     }
                                 });
 
+                                console.log('scrape: ', scrape)
+
                                 return (
                                     <div
                                         className="list-item hoverable"
@@ -150,7 +152,12 @@ class App extends React.Component {
                                                     <span className="type">Address: </span>
                                                     <span>{scrape.inputRange.quoteDetails.addressDetails.address.value}</span>
                                                 </div>
+                                                <div>
+                                                    <span className="type">Bike: </span>
+                                                    <span>{scrape.inputRange.quoteDetails.bikeDetails.bike.text}</span>
+                                                </div>
                                             </div>
+                                            <div className="break" />
                                             <div className="text-container">
                                                 <span className="type">Price:</span>
                                                 <span className="space" />
