@@ -22,9 +22,9 @@
         font-size: 110%; }
       .app > .content .container .list-item {
         padding: 8px; }
-        .app > .content .container .list-item.activated:hover {
+        .app > .content .container .list-item.hoverable:hover {
           background: #cecece; }
-        .app > .content .container .list-item.activated:active {
+        .app > .content .container .list-item.clickable:active {
           background: #89bcff;
           box-shadow: 0px 1px 5px #5a5a5a; }
         .app > .content .container .list-item .text-container {
@@ -32,5 +32,9 @@
           justify-content: space-between; }
           .app > .content .container .list-item .text-container .break {
             width: 40px; }
+          .app > .content .container .list-item .text-container .space {
+            width: 9px; }
           .app > .content .container .list-item .text-container .type {
             color: #747474; }
+          .app > .content .container .list-item .text-container .highlight {
+            font-weight: bold; }

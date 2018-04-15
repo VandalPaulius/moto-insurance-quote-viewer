@@ -81,7 +81,7 @@ class App extends React.Component {
                 <div>
                     {this.state.batches.map((batch) => (
                         <div
-                            className="list-item activated"
+                            className="list-item hoverable clickable"
                             key={batch._id}
                             onClick={() => {
                                 this.actions.setActiveBatch(batch._id);
@@ -123,7 +123,7 @@ class App extends React.Component {
         return (
             <div className="container">
                 <div className="header">
-                    Batches
+                    Quotes
                 </div>
                 <div className="content">
                     {activeScrapes
@@ -137,29 +137,43 @@ class App extends React.Component {
 
                                 return (
                                     <div
-                                        className="list-item"
+                                        className="list-item hoverable"
                                         key={scrape._id}
                                     >
-                                        <div>
-                                            <span>
-                                                PostCode: {scrape.inputRange.quoteDetails.addressDetails.postCode.value}
-                                            </span>
-                                            <span>
-                                                Address: {scrape.inputRange.quoteDetails.addressDetails.address.value}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            {leastExpensive.map((quote, index) => (
-                                                <div key={`${index}-${quote.price.full}`}>
-                                                    {quote.price.full}
+                                        <div className="text-container">
+                                            <div>
+                                                <div>
+                                                    <span className="type">PostCode: </span>
+                                                    <span>{scrape.inputRange.quoteDetails.addressDetails.postCode.value}</span>
                                                 </div>
-                                            ))}
+                                                <div>
+                                                    <span className="type">Address: </span>
+                                                    <span>{scrape.inputRange.quoteDetails.addressDetails.address.value}</span>
+                                                </div>
+                                            </div>
+                                            <div className="text-container">
+                                                <span className="type">Price:</span>
+                                                <span className="space" />
+                                                <span>
+                                                    {leastExpensive.map((quote, index) => (
+                                                        <div
+                                                            className={index === 0 ? 'highlight' : ''}
+                                                            key={`${index}-${quote.price.full}`}
+                                                        >
+                                                            {quote.price.full}
+                                                        </div>
+                                                    ))}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 );
                             } else {
                                 return (
-                                    <div key={scrape._id}>
+                                    <div
+                                        className="list-item hoverable"
+                                        key={scrape._id}
+                                    >
                                         No quotes
                                     </div>
                                 );
