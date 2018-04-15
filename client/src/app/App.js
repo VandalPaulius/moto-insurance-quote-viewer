@@ -160,14 +160,22 @@ class App extends React.Component {
                                                 <span className="type">Price:</span>
                                                 <span className="space" />
                                                 <span>
-                                                    {leastExpensive.map((quote, index) => (
-                                                        <div
-                                                            className={index === 0 ? 'highlight' : ''}
-                                                            key={`${index}-${quote.price.full}`}
-                                                        >
-                                                            {quote.price.full}
-                                                        </div>
-                                                    ))}
+                                                    {leastExpensive.map((quote, index) => {
+                                                        if (!quote.price) {
+                                                            return (
+                                                                <div>No price available</div>
+                                                            );
+                                                        }
+
+                                                        return (
+                                                            <div
+                                                                className={index === 0 ? 'highlight' : ''}
+                                                                key={`${index}-${quote.price.full}`}
+                                                            >
+                                                                {quote.price.full}
+                                                            </div>
+                                                        )
+                                                    })}
                                                 </span>
                                             </div>
                                         </div>
@@ -196,6 +204,8 @@ class App extends React.Component {
     }
 
     render() {
+        console.log('this.state', this.state)
+
         return (
             <div className="app">
                 <div className="content">
