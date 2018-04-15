@@ -81,7 +81,7 @@ class App extends React.Component {
                 <div>
                     {this.state.batches.map((batch) => (
                         <div
-                            className="list-item hoverable clickable"
+                            className={`list-item hoverable clickable ${this.state.activeBatchId === batch._id ? 'selected' : ''}`}
                             key={batch._id}
                             onClick={() => {
                                 this.actions.setActiveBatch(batch._id);
