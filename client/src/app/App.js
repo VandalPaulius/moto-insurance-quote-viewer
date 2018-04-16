@@ -129,7 +129,9 @@ class App extends React.Component {
                     {activeScrapes
                         ? activeScrapes.map((scrape) => {
                             if (scrape.startedAt) {
-                                const leastExpensive = scrape.quotes.filter((quote, index) => {
+                                const quotes = scrape.quotes ? scrape.quotes : [];
+
+                                const leastExpensive = quotes.filter((quote, index) => {
                                     if (index < 3) {
                                         return quote;
                                     }
@@ -144,11 +146,11 @@ class App extends React.Component {
                                             <div>
                                                 <div>
                                                     <span className="type">PostCode: </span>
-                                                    <span>{scrape.inputRange.quoteDetails.addressDetails.postCode.value}</span>
+                                                    <span>{scrape.inputRange.quoteDetails.addressDetails.address.postCode.value}</span>
                                                 </div>
                                                 <div>
                                                     <span className="type">Address: </span>
-                                                    <span>{scrape.inputRange.quoteDetails.addressDetails.address.value}</span>
+                                                    <span>{scrape.inputRange.quoteDetails.addressDetails.address.address.value}</span>
                                                 </div>
                                                 <div>
                                                     <span className="type">Bike: </span>
